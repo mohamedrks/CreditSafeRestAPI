@@ -2,6 +2,7 @@
 using ChartAPI.Interfaces;
 using ChartAPI.Model;
 using ChartAPI.Model.DTOs;
+using CreditSafeAPI.Interfaces;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,29 +13,21 @@ namespace ChartAPI.Services
 {
     public class CountryService : ICountryService
     {
-
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly IOpenWeatherService _openWeatherService;
+        private readonly IRestCountryService  _restCountryService;
         private readonly WeatherContext _weatherContext;
-
-        private readonly HttpClient _httpClientOpenWeather;
-        private readonly HttpClient _httpClientRestcountries;
-        private readonly string _API_KEY;
 
         public CountryService
         (
-            IHttpClientFactory clientFactory,
+            IOpenWeatherService openWeatherService,
+            IRestCountryService restCountryService,
             WeatherContext weatherContext
         )
         {
-            _clientFactory = clientFactory;
             _weatherContext = weatherContext;
+            _restCountryService = restCountryService;
+            _openWeatherService = openWeatherService;
 
-            _httpClientOpenWeather = _clientFactory.CreateClient();
-            _httpClientRestcountries = _clientFactory.CreateClient();
-
-            _httpClientRestcountries.BaseAddress = new System.Uri("https://restcountries.com/v2/");
-            _httpClientOpenWeather.BaseAddress = new System.Uri("https://api.openweathermap.org/data/2.5/weather");
-            _API_KEY = "71dc8df57b816d6f463f5f82b2f65376";
         }
 
         public async Task<IEnumerable<CityDto>> GetAllCountriesAsync()
@@ -43,8 +36,8 @@ namespace ChartAPI.Services
             List<CityDto> citiesDto = new List<CityDto>();
             foreach (var city in cities)
             {
-                var cityWeatherInfo = await GetCityWeatherInformation(city.Name);
-                var cityInfo = await GetCityInformation(city.Name);
+                var cityWeatherInfo = await _openWeatherService.GetCityWeatherInformation(city.Name);
+                var cityInfo = await _restCountryService.GetCityInformation(city.Name);
                 if( cityWeatherInfo != null && cityInfo != null)
                 {
                     var cityDto = new CityDto()
@@ -70,8 +63,8 @@ namespace ChartAPI.Services
             var city = await _weatherContext.Cities.FindAsync(id);
             if( city != null)
             {
-                var cityWeatherInfo = await GetCityWeatherInformation(city.Name);
-                var cityInfo = await GetCityInformation(city.Name);
+                var cityWeatherInfo = await _openWeatherService.GetCityWeatherInformation(city.Name);
+                var cityInfo = await _restCountryService.GetCityInformation(city.Name);
                 if (cityWeatherInfo != null && cityInfo != null)
                 {
                     var cityDto = new CityDto()
@@ -138,30 +131,5 @@ namespace ChartAPI.Services
             return true;
         }
 
-        private async Task<CityWeatherInfo> GetCityWeatherInformation(string cityName)
-        {
-            var response = await _httpClientOpenWeather.GetAsync($"?q={cityName}&appid={_API_KEY}");
-            if (response.IsSuccessStatusCode)
-            {
-                var responseData = await response.Content.ReadAsStringAsync();
-                var model = JsonConvert.DeserializeObject<CityWeatherInfo>(responseData);
-                return model;
-            }
-
-            return null;
-        }
-
-        private async Task<IList<CityInfo>> GetCityInformation(string cityName)
-        {
-            var response = await _httpClientRestcountries.GetAsync($"capital/{cityName}");
-            if (response.IsSuccessStatusCode)
-            {
-                var responseData = await response.Content.ReadAsStringAsync();
-                var model = JsonConvert.DeserializeObject<IList<CityInfo>>(responseData);
-                return model;
-            }
-
-            return null;
-        }
     }
 }

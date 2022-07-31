@@ -5,6 +5,8 @@ VisualStudioVersion = 17.2.32602.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CreditSafeAPI", "CreditSafeAPI\CreditSafeAPI.csproj", "{CE321F8C-B182-4D2B-9CC4-5FC0E65D0CC2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestsCreditsafe", "UnitTestsCreditsafe\UnitTestsCreditsafe.csproj", "{39EE3435-9BF2-4AE0-AF0B-B52960FBB0A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{CE321F8C-B182-4D2B-9CC4-5FC0E65D0CC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE321F8C-B182-4D2B-9CC4-5FC0E65D0CC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE321F8C-B182-4D2B-9CC4-5FC0E65D0CC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39EE3435-9BF2-4AE0-AF0B-B52960FBB0A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39EE3435-9BF2-4AE0-AF0B-B52960FBB0A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39EE3435-9BF2-4AE0-AF0B-B52960FBB0A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39EE3435-9BF2-4AE0-AF0B-B52960FBB0A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

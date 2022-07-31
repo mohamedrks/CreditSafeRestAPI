@@ -1,6 +1,8 @@
 using ChartAPI.Common;
 using ChartAPI.Interfaces;
 using ChartAPI.Services;
+using CreditSafeAPI.Interfaces;
+using CreditSafeAPI.Services.ExternalAPIServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -46,6 +48,9 @@ namespace ChartAPI
             services.AddHttpClient();
 
             services.AddTransient<ICountryService, CountryService>();
+            services.AddTransient<IOpenWeatherService, OpenWeatherService>();
+            services.AddTransient<IRestCountryService, RestCountryService>();
+
 
             services.AddControllers();
         }

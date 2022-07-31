@@ -9,7 +9,7 @@ namespace ChartAPI.Common
         {
         }
 
-        public DbSet<City> Cities { get; set; }
+        public virtual DbSet<City> Cities { get; set; }
     }
 }
 
