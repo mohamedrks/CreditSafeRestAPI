@@ -9,6 +9,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Polly;
+using Polly.Extensions.Http;
+using System;
+using System.Net.Http;
 
 namespace ChartAPI
 {
@@ -37,8 +41,11 @@ namespace ChartAPI
 
             services.AddDbContext<WeatherContext>(op => op.UseSqlServer(Configuration.GetConnectionString("Database")));
 
+            services.AddHttpClient<IOpenWeatherService, OpenWeatherService>()
+                    .AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.RetryAsync(2));
 
-            services.AddHttpClient();
+            services.AddHttpClient<IRestCountryService, RestCountryService>()
+                    .AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.RetryAsync(2));
 
             services.AddSingleton(Configuration);
 
