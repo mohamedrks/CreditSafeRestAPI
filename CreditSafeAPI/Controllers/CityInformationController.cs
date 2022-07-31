@@ -16,21 +16,19 @@ namespace ChartAPI.Controllers
     public class CityInformationController : ControllerBase
     {
 
-        private readonly WeatherContext _weatherContext;
         private readonly ICountryService _countryService;
 
         public CityInformationController(
-             WeatherContext weatherContext,
              ICountryService countryService
         )
         {
-            _weatherContext = weatherContext;
             _countryService = countryService;
         }
 
 
         [HttpGet]
-        public async Task<IEnumerable<CityDto>> Get()
+        [ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
+        public async Task<IEnumerable<CityDto>> Get() 
         {
             return await _countryService.GetAllCountriesAsync();
         }

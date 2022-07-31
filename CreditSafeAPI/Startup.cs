@@ -5,17 +5,10 @@ using CreditSafeAPI.Interfaces;
 using CreditSafeAPI.Services.ExternalAPIServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ChartAPI
 {
@@ -47,10 +40,13 @@ namespace ChartAPI
 
             services.AddHttpClient();
 
+            services.AddSingleton(Configuration);
+
             services.AddTransient<ICountryService, CountryService>();
             services.AddTransient<IOpenWeatherService, OpenWeatherService>();
             services.AddTransient<IRestCountryService, RestCountryService>();
 
+            services.AddResponseCaching();
 
             services.AddControllers();
         }
@@ -64,6 +60,8 @@ namespace ChartAPI
             }
 
             app.UseHttpsRedirection();
+
+            app.UseResponseCaching();
 
             app.UseRouting();
 
